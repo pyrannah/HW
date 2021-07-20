@@ -29,25 +29,25 @@ public class UserService {
     private static UserService service = new UserService();
     private static DatabaseConnectionService databaseConnectionService = new DatabaseConnectionService();
 
-    private UserService(){
+    public UserService(){
 
     }
 
     public static UserService getInstance(){
         if (service== null){
             service = new UserService();
-            service.setDatabaseConnectionService(DatabaseConnectionService.getInstance());
+            UserService.setDatabase(DatabaseConnectionService.getInstance());
         }
         return service;
 
     }
 
+    private static void setDatabase(DatabaseConnectionService instance) {
 
-    public void setDatabaseConnectionService(DatabaseConnectionService databaseConnectionService) {
-        this.databaseConnectionService = databaseConnectionService;
     }
 
     public void createUser(String username, String password, String displayName) throws UserServiceException {
+
         try (
                 Connection connection = databaseConnectionService.getConnection();
                 PreparedStatement ps = connection.prepareStatement(INSERT_USER_SQL);
@@ -61,16 +61,13 @@ public class UserService {
             connection.commit();
 
         }catch (SQLIntegrityConstraintViolationException e){
-            throw new UsernameNotUniqueException(String.format("Username %s has already been taken"));
+            throw new UsernameNotUniqueException(String.format("Username %s has already been taken",username));
         }catch (SQLException throwables){
             throw new UserServiceException(throwables.getMessage());
         }
 
 
     }
-
-
-
 
     public User findByUsername(String username) throws UserServiceException {
         try (
@@ -96,8 +93,8 @@ public class UserService {
         try {
                 Connection connection = databaseConnectionService.getConnection();
                 PreparedStatement ps = connection.prepareStatement(SELECT_ALL_USERS_SQL);
+                ResultSet resultSet = ps.executeQuery();
 
-            ResultSet resultSet = ps.executeQuery();
             while (resultSet.next()){
                 users.add(
                         new User(
@@ -129,11 +126,6 @@ public class UserService {
         }
 
     }
-
-    public boolean deleteUserById(Long userId) {
-        throw  new UnsupportedOperationException("not yet implemented");
-    }
-
 
     public void updateUserByUserName(String username, String displayName) throws UserServiceException {
 
@@ -196,10 +188,13 @@ public class UserService {
 //        System.out.println(user.getUsername());
 
 
-        Connection connection = databaseConnectionService.getConnection();
+//        Connection connection = databaseConnectionService.getConnection();
+//
+//        service.createUser("ad","123456","Admin2");
+//        System.out.println(connection==null);
 
-        service.createUser("ad","123456","Admin2");
-        System.out.println(connection==null);
+
+        service.createUser("admin1", "password", "displayName");
 
 
 

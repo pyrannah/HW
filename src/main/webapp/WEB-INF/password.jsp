@@ -21,11 +21,10 @@
 </style>
 <div class="container-fluid">
     <nav class="navbar navbar-light bg-light">
-        <a class="navbar-brand" href="/">SSC - Login Webapp</a>
+        <a class="navbar-brand" href="/" >SSC - Login Webapp</a>
         <a class="btn btn-light btn-sm pull-right" type="button" href="/logout">
             <i class="fa fa-sign-out"></i> &nbsp; Logout</a>
     </nav>
-
     <c:if test="${not empty message}">
         <c:choose>
             <c:when test="${hasError}">
@@ -37,7 +36,6 @@
                 <div class="alert alert-success" role="alert" md-6>
                     <a><i class="fa fa-check-circle-o" style="color: green"></i> ${message} </a>
                 </div>
-
             </c:otherwise>
         </c:choose>
     </c:if>
@@ -48,20 +46,11 @@
                 <div class="col-xxl-4 col-xl-5 col-lg-5 col-md-7 col-sm-9 my-auto">
                     <div class="card shadow-lg">
                         <div class="card-body p-5">
-                            <h1 class="fs-4 card-title fw-bold mb-4">Create New User</h1>
+                            <h1 class="fs-4 card-title fw-bold mb-4">Change Password (${username})</h1>
                             <p>
-
                                 ${error}
                             </p>
-                            <form action="/user/create" method="POST" autocomplete="off">
-                                <div class="mb-3">
-                                    <label class="mb-2 text-muted">Username</label>
-                                    <input type="text" name="username" class="form-control" value="${username}">
-                                </div>
-                                <div class="mb-3">
-                                    <label class="mb-2 text-muted">Display Name</label>
-                                    <input type="text" name="displayName" class="form-control" value="${displayName}">
-                                </div>
+                            <form action="/user/password?username=${username}" method="POST" autocomplete="off">
                                 <div class="mb-3">
                                     <label class="mb-2 text-muted">Password</label>
                                     <input type="password" name="password" class="form-control" value="${password}">
@@ -73,7 +62,7 @@
 
                                 <div class="d-flex align-items-center">
                                     <button type="submit" class="btn btn-success ms-auto">
-                                        Create
+                                        Save
                                     </button>
                                 </div>
                             </form>
@@ -83,6 +72,7 @@
             </div>
         </div>
     </section>
+
 </div>
 
 </body>

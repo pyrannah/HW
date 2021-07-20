@@ -6,10 +6,12 @@
 package io.muic.ooc.webapp.servlet;
 
 import io.muic.ooc.webapp.Routable;
+import io.muic.ooc.webapp.model.User;
 import io.muic.ooc.webapp.service.SecurityService;
 import io.muic.ooc.webapp.service.UserService;
 import io.muic.ooc.webapp.service.UserServiceException;
 import lombok.SneakyThrows;
+import org.apache.commons.lang.StringUtils;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -19,9 +21,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class HomeServlet extends HttpServlet implements Routable {
-
-    private SecurityService securityService = new SecurityService();
+public class HomeServlet extends AbstractRoutableHttpServlet {
 
     @Override
     public String getMapping() {
@@ -29,31 +29,19 @@ public class HomeServlet extends HttpServlet implements Routable {
     }
 
     @Override
-    public void setSecurityService(SecurityService securityService) {
-        this.securityService = securityService;
-    }
-
-
-
-    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-//        boolean authorized = securityService.isAuthorized(request);
-
         try {
             if (securityService.isAuthorized(request)) {
-                // do MVC in here
                 String username = (String) request.getSession().getAttribute("username");
                 UserService userService = UserService.getInstance();
 
-
                 request.setAttribute("currentUser", userService.findByUsername(username));
-                request.setAttribute("user", userService.findAll());
+                request.setAttribute("users", userService.findAll());
 
-                RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/home.jsp");
-                rd.include(request, response);
+                RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/home.jsp");
+                requestDispatcher.include(request, response);
 
-
+                // removing attributes as soon as they are used is known as flash session
                 request.getSession().removeAttribute("hasError");
                 request.getSession().removeAttribute("message");
 
@@ -69,3 +57,4 @@ public class HomeServlet extends HttpServlet implements Routable {
         }
     }
 }
+

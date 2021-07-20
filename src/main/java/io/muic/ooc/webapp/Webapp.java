@@ -34,10 +34,10 @@ public class Webapp {
             servletRouter.init(ctx);
 
 
-            ErrorPage error404Page = new ErrorPage();
-            error404Page.setErrorCode(404);
-            error404Page.setLocation("/WEB-INF/error404.jsp");
-            ctx.addErrorPage(error404Page);
+//            ErrorPage error404Page = new ErrorPage();
+//            error404Page.setErrorCode(404);
+//            error404Page.setLocation("/WEB-INF/error404.jsp");
+//            ctx.addErrorPage(error404Page);
 
             tomcat.start();
             tomcat.getServer().await();

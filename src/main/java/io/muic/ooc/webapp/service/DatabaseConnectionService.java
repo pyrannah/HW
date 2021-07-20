@@ -11,11 +11,7 @@ public class DatabaseConnectionService {
 
     private static DatabaseConnectionService service;
 
-//    private final HikariDataSource ds ;
-
-
     public Connection getConnection() {
-
         try {
             ConfigProperties configProperties = ConfigurationLoader.load();
             if (configProperties == null) {
@@ -34,10 +30,6 @@ public class DatabaseConnectionService {
             return null;
         }
     }
-
-//    public Connection getConnection() throws SQLException {
-//        return ds.getConnection();
-//    }
 
     public static DatabaseConnectionService getInstance() {
         if (service == null) {

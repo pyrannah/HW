@@ -132,7 +132,7 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>io.muic.ssc.webapp.basic.Webapp</mainClass>
+                            <mainClass>io.muic.ooc.webapp.Webapp</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

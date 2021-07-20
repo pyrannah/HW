@@ -3,6 +3,7 @@ package io.muic.ooc.webapp.servlet;
 import io.muic.ooc.webapp.Routable;
 import io.muic.ooc.webapp.service.SecurityService;
 import io.muic.ooc.webapp.service.UserService;
+import lombok.Setter;
 import lombok.SneakyThrows;
 import org.apache.commons.lang.StringUtils;
 
@@ -13,18 +14,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class CreateUserServlet extends HttpServlet implements Routable {
-
-    private SecurityService securityService;
+public class CreateUserServlet extends AbstractRoutableHttpServlet {
 
     @Override
     public String getMapping() {
         return "/user/create";
-    }
-
-    @Override
-    public void setSecurityService(SecurityService securityService) {
-        this.securityService = securityService;
     }
 
     @SneakyThrows
@@ -33,11 +27,8 @@ public class CreateUserServlet extends HttpServlet implements Routable {
         boolean authorized = securityService.isAuthorized(request);
         if (authorized) {
             // do MVC in here
-//            String username = (String) request.getSession().getAttribute("username");
-//            UserService userService = UserService.getInstance();
-
-
-//            request.setAttribute("user", userService.findByUsername(username));
+            String username = (String) request.getSession().getAttribute("username");
+            request.setAttribute("user", username);
 
 
             RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/create.jsp");
@@ -62,9 +53,7 @@ public class CreateUserServlet extends HttpServlet implements Routable {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         boolean authorized = securityService.isAuthorized(request);
-
         if (authorized) {
-
             String username = StringUtils.trim(request.getParameter("username"));
             String displayName = StringUtils.trim(request.getParameter("displayName"));
             String password = StringUtils.trim(request.getParameter("password"));
@@ -116,8 +105,8 @@ public class CreateUserServlet extends HttpServlet implements Routable {
             request.setAttribute("cpassword", cpassword);
 
             // if not success, it will arrive here
-            RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/create.jsp");
-            requestDispatcher.include(request, response);
+            RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/create.jsp");
+            rd.include(request, response);
 
             // removing attributes as soon as they are used is known as flash session
             request.getSession().removeAttribute("hasError");

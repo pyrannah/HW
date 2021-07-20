@@ -6,8 +6,6 @@ import java.util.Properties;
 
 public class ConfigurationLoader {
 
-
-
     public static ConfigProperties load() {
 
         String configFileName = "config.properties";
@@ -34,7 +32,6 @@ public class ConfigurationLoader {
 //configProperties.setGetDatabasePassword(password);
 
 
-
             return new ConfigProperties.ConfigPropertiesBuilder()
                     .databaseDriverClassName(driverClassName)
                     .databaseConnectionUrl(connectionUrl)
@@ -46,11 +43,10 @@ public class ConfigurationLoader {
 
 
         } catch (IOException e) {
-            System.out.println("Exception" + e);
+            return null;
+
         }
-        return null;
+
+
     }
-
-
-
 }

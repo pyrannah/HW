@@ -16,13 +16,9 @@ import lombok.Setter;
 import org.apache.commons.lang.StringUtils;
 import org.mindrot.jbcrypt.BCrypt;
 
-/**
- *
- * @author gigadot
- */
 public class SecurityService {
 
-//    @Setter
+    @Setter
     private UserService userService;
 
     public void setUserService(UserService userService) {
@@ -38,8 +34,6 @@ public class SecurityService {
 
     public boolean authenticate(String username, String password, HttpServletRequest request) throws UserServiceException {
         User user = userService.findByUsername(username);
-//        String passwordInDB = userService.get(username);
-//        boolean isMatched = StringUtils.equals(password, passwordInDB);
         if (user != null && BCrypt.checkpw(password,user.getPassword())) {
             request.getSession().setAttribute("username", username);
             return true;
@@ -67,6 +61,11 @@ public class SecurityService {
             return false;
         }
 
+    }
+    public String getCurrentUsername(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        Object usernameObject = session.getAttribute("username");
+        return (String) usernameObject;
     }
 
 
